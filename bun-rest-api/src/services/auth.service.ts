@@ -14,7 +14,7 @@ export const registerUser = async (
   const userExists = await User.findOne({ email });
 
   if (userExists) {
-    throw new Error("Kullanıcı zaten mevcut");
+    throw new Error("Bu mail kullanılıyor, lütfen başka bir mail deneyin");
   }
 
   const hashedPassword = await hashPassword(password);
@@ -40,7 +40,7 @@ export const loginUser = async (
   const user = await User.findOne({ email });
 
   if (!user) {
-    throw new Error("Kullanıcı bulunamadı");
+    throw new Error("Bu mail ile kayıtlı bir kullanıcı bulunamadı");
   }
 
   const isPasswordValid = await comparePassword(
@@ -49,12 +49,8 @@ export const loginUser = async (
   );
 
   if (!isPasswordValid) {
-    throw new Error("Şifre yanlış");
+    throw new Error("Bu şifre yanlış, lütfen tekrar deneyin");
   }
 
-  return {
-    uuid: user.uuid,
-    name: user.name,
-    email: user.email,
-  };
+  return user;
 };

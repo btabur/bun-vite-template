@@ -3,6 +3,7 @@ import {
   loginUser,
 } from "../services/auth.service";
 
+
 export const registerController = async ({
   body,
   set,
@@ -33,6 +34,7 @@ export const registerController = async ({
 
 export const loginController = async ({
   body,
+  jwt,
   set,
 }: any) => {
   try {
@@ -43,10 +45,20 @@ export const loginController = async ({
       password
     );
 
+    const token = await jwt.sign({
+      uuid: user.uuid,
+      email: user.email,
+    });
+
     return {
       success: true,
       message: "Giriş başarılı",
-      user,
+      token,
+      user: {
+        uuid: user.uuid,
+        name: user.name,
+        email: user.email,
+      },
     };
   } catch (error: any) {
     set.status = 400;
@@ -56,4 +68,13 @@ export const loginController = async ({
       message: error.message,
     };
   }
+};
+
+export const meController = async ({
+  user,
+}: any) => {
+  return {
+    success: true,
+    user,
+  };
 };

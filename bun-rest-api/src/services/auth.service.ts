@@ -11,6 +11,7 @@ export const registerUser = async (
   email: string,
   password: string
 ) => {
+  email = email.toLowerCase().trim();
   const userExists = await User.findOne({ email });
 
   if (userExists) {
@@ -24,6 +25,7 @@ export const registerUser = async (
     name,
     email,
     password: hashedPassword,
+    role: "user",
   });
 
   return {

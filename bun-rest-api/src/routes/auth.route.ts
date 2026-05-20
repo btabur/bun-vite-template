@@ -1,4 +1,4 @@
-import { Elysia } from "elysia";
+import { Elysia, t } from "elysia";
 
 import {
   registerController,
@@ -12,9 +12,22 @@ export const authRoutes = new Elysia({
   prefix: "/auth",
 })
 
-  .post("/register", registerController)
+ // REGISTER
+.post("/register", registerController, {
+  body: t.Object({
+    name: t.String({ minLength: 2 }),
+    email: t.String({ format: "email" }),
+    password: t.String({ minLength: 6 }),
+  }),
+})
 
-  .post("/login", loginController)
+// LOGIN
+.post("/login", loginController, {
+  body: t.Object({
+    email: t.String({ format: "email" }),
+    password: t.String({ minLength: 6 }),
+  }),
+})
 
   .derive(authMiddleware)
 

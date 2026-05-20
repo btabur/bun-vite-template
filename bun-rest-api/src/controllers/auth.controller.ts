@@ -39,7 +39,6 @@ export const loginController = async ({
 }: any) => {
   try {
     const { email, password } = body;
-
     const user = await loginUser(
       email,
       password
@@ -48,6 +47,7 @@ export const loginController = async ({
     const token = await jwt.sign({
       uuid: user.uuid,
       email: user.email,
+      role: user.role,
     });
 
     return {
